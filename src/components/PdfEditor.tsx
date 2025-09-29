@@ -921,6 +921,19 @@ const PdfEditor = () => {
         font: "Helvetica",
         fontSize: 12,
       };
+
+      if (isTextType(selectedTool)) {
+        newField.autoSize = false;
+        newField.fontSize = 10;
+      } else if (selectedTool === "radio") {
+        newField.options = ["Option 1", "Option 2"];
+        const optionHeight = rect.height / 2;
+        newField.widgetRects = [
+          { ...rect, height: optionHeight },
+          { ...rect, y: rect.y + optionHeight, height: optionHeight },
+        ];
+      }
+
       setFields((prev) => [...prev, newField]);
       setSelectedFieldId(newField.id);
       setSelectedTool(null);
