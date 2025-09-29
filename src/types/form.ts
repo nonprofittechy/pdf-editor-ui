@@ -1,4 +1,12 @@
-export type FieldType = "text" | "multiline" | "checkbox" | "signature";
+export type FieldType =
+  | "text"
+  | "multiline"
+  | "checkbox"
+  | "signature"
+  | "radio"
+  | "dropdown"
+  | "listbox"
+  | "button";
 
 export type FieldFont =
   | "Helvetica"
@@ -24,4 +32,6 @@ export interface PdfField {
   autoSize: boolean;
   font: FieldFont;
   fontSize: number;
+  options?: string[];
+  widgetRects?: NormalizedRect[];
 }
