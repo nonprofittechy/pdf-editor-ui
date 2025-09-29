@@ -1,36 +1,49 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# PDF Form Designer
+
+Interactive web app for uploading an existing PDF, visually placing AcroForm fields, editing their properties, and exporting an updated document. Built with Next.js, Tailwind CSS, pdf.js for rendering, and pdf-lib for AcroForm authoring.
+
+## Features
+
+- Upload any PDF and render each page with crisp zoom-friendly canvases.
+- Draw bounding boxes to add single-line text, multi-line text, checkboxes, and digital signature fields.
+- Drag-and-drop to reposition fields directly on the page overlay.
+- Field inspector sidebar to rename labels, adjust fonts and sizing, and review every field at a glance.
+- Export an updated PDF with embedded AcroForm fields ready for standard PDF readers.
 
 ## Getting Started
 
-First, run the development server:
+Install dependencies and launch the dev server:
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) to use the designer.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+For a production build:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run build
+npm run start
+```
 
-## Learn More
+## Usage
 
-To learn more about Next.js, take a look at the following resources:
+1. Upload a PDF via the **Upload PDF** control in the top toolbar.
+2. Choose a field tool (Text, Multi-line, Checkbox, Signature) and drag on the page to draw the field bounds.
+3. Drag placed fields to fine-tune their position. The overlay snaps to your drag movement.
+4. Use the right-hand **Fields** panel to rename fields, tune fonts, toggle auto-sizing, or delete entries.
+5. Click **Export PDF** to download a copy of the document with your fields embedded.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Tech Stack
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- Next.js 15 (App Router)
+- Tailwind CSS for styling
+- pdf.js for on-canvas PDF rendering
+- pdf-lib for AcroForm creation and export
 
-## Deploy on Vercel
+## Notes
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Signature widgets are exported as `/Sig` fields so they appear as digital signature placeholders in compliant PDF viewers.
+- Text fields can use Helvetica, Times, or Courier families. Auto-size can be toggled off to enforce an explicit font size.
