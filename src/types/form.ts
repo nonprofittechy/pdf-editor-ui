@@ -35,3 +35,31 @@ export interface PdfField {
   options?: string[];
   widgetRects?: NormalizedRect[];
 }
+
+export interface TextElement {
+  text: string;
+  rect: NormalizedRect;
+  fontSize: number;
+}
+
+export interface DetectedElement {
+  type: 'text' | 'checkbox' | 'radio' | 'signature' | 'box' | 'line' | 'bracket' | 'circle';
+  rect: { x: number; y: number; width: number; height: number };
+  confidence: number;
+}
+
+export interface FieldSuggestion {
+  element: DetectedElement;
+  suggestedName: string;
+  suggestedType: FieldType;
+  nearbyText: string[];
+  confidence: number;
+  pageIndex?: number;
+  // Computed properties for UI display
+  name: string;
+  type: FieldType;
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+}

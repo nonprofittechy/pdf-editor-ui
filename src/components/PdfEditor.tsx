@@ -26,7 +26,9 @@ import {
   createPDFAcroFields,
 } from "pdf-lib";
 import { normalizeFieldNames } from "@/lib/normalize";
-import type { FieldFont, FieldType, NormalizedRect, PdfField } from "@/types/form";
+import { PDFFieldDetector } from "@/lib/pdfFieldDetection";
+import { runDetectionTest } from "@/lib/detectionTest";
+import type { FieldFont, FieldType, NormalizedRect, PdfField, TextElement, DetectedElement, FieldSuggestion } from "@/types/form";
 
 type PdfJsModule = {
   getDocument: (
@@ -52,6 +54,8 @@ const loadPdfJs = async (): Promise<PdfJsModule> => {
   }
   return pdfjsModulePromise;
 };
+
+// Field detection types are now imported from @/types/form
 
 const AVAILABLE_FONTS: FieldFont[] = [
   "Helvetica",
@@ -88,6 +92,11 @@ const TOOL_LABELS: Record<string, string> = {
 };
 
 // Icon components for each field type
+const getFieldIcon = (type: FieldType) => {
+  const IconComponent = FieldIcons[type];
+  return <IconComponent className="w-3 h-3" />;
+};
+
 const FieldIcons: Record<FieldType, React.FC<{ className?: string }>> = {
   text: ({ className = "w-4 h-4" }) => (
     <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
@@ -1003,6 +1012,187 @@ const fontByName = async (pdfDoc: PDFDocument, fontName: FieldFont): Promise<PDF
   return pdfDoc.embedStandardFont(standardFont);
 };
 
+// PDF Content Analysis Functions
+const extractTextFromPage = async (pdf: PDFDocumentProxy, pageIndex: number): Promise<TextElement[]> => {
+  try {
+    const page = await pdf.getPage(pageIndex + 1);
+    const textContent = await page.getTextContent();
+    const viewport = page.getViewport({ scale: 1 });
+    
+    // Extract individual text items with detailed positioning
+    const textItems: Array<{text: string; x: number; y: number; width: number; height: number; fontSize: number; transform: number[]}> = [];
+    textContent.items.forEach((item) => {
+      if (item && 'str' in item && item.str && item.str.trim() && 'transform' in item) {
+        const transform = item.transform;
+        const x = transform[4];
+        const y = viewport.height - transform[5]; // Flip Y coordinate for standard coordinates
+        const fontSize = Math.abs(transform[3]) || 12;
+        
+        // Calculate approximate width based on character count and font size
+        const charWidth = fontSize * 0.6; // Approximate character width
+        const width = item.str.length * charWidth;
+        
+        textItems.push({
+          text: item.str.trim(),
+          x: x,
+          y: y,
+          width: width,
+          height: fontSize,
+          fontSize: fontSize,
+          transform: transform
+        });
+      }
+    });
+    
+    // Group text items into logical text boxes (similar to pdfminer's approach)
+    const textboxes = groupTextIntoLines(textItems);
+    
+    // Convert to normalized coordinates for consistency
+    return textboxes.map(box => ({
+      text: box.text,
+      rect: {
+        x: box.x / viewport.width,
+        y: box.y / viewport.height,
+        width: box.width / viewport.width,
+        height: box.height / viewport.height
+      },
+      fontSize: box.fontSize
+    }));
+    
+  } catch (error) {
+    console.warn('Failed to extract text from page:', error);
+    return [];
+  }
+};
+
+// Group individual text items into coherent text lines/boxes
+const groupTextIntoLines = (textItems: Array<{text: string; x: number; y: number; width: number; height: number; fontSize: number; transform: number[]}>) => {
+  if (textItems.length === 0) return [];
+  
+  // Sort by Y position (top to bottom), then X position (left to right)
+  textItems.sort((a, b) => {
+    const yDiff = Math.abs(a.y - b.y);
+    if (yDiff < 3) { // Same line threshold
+      return a.x - b.x;
+    }
+    return b.y - a.y; // Higher Y first (top to bottom)
+  });
+  
+  const textboxes: Array<{text: string; x: number; y: number; width: number; height: number; fontSize: number; items: typeof textItems}> = [];
+  let currentLine: {text: string; x: number; y: number; width: number; height: number; fontSize: number; items: typeof textItems} | null = null;
+  
+  for (const item of textItems) {
+    if (!currentLine) {
+      // Start first line
+      currentLine = {
+        text: item.text,
+        x: item.x,
+        y: item.y,
+        width: item.width,
+        height: item.height,
+        fontSize: item.fontSize,
+        items: [item]
+      };
+    } else {
+      const yThreshold = Math.max(currentLine.fontSize * 0.4, 3);
+      const xGap = item.x - (currentLine.x + currentLine.width);
+      const maxGap = Math.max(currentLine.fontSize * 1.0, 10);
+      
+      const isOnSameLine = Math.abs(item.y - currentLine.y) <= yThreshold;
+      const isReasonablyClose = xGap <= maxGap;
+      
+      if (isOnSameLine && isReasonablyClose) {
+        // Add to current line
+        const gap = Math.max(0, xGap);
+        currentLine.text += (gap > 2 ? ' ' : '') + item.text;
+        currentLine.width = item.x + item.width - currentLine.x;
+        currentLine.height = Math.max(currentLine.height, item.height);
+        currentLine.items.push(item);
+      } else {
+        // Finish current line and start new one
+        textboxes.push(currentLine);
+        currentLine = {
+          text: item.text,
+          x: item.x,
+          y: item.y,
+          width: item.width,
+          height: item.height,
+          fontSize: item.fontSize,
+          items: [item]
+        };
+      }
+    }
+  }
+  
+  if (currentLine) {
+    textboxes.push(currentLine);
+  }
+  
+  // Filter out very short or meaningless text
+  return textboxes.filter(box => 
+    box.text.trim().length > 0 && 
+    !box.text.match(/^[_\s\.\-]{1,3}$/) // Filter out underscores, dots, dashes only
+  );
+};
+
+const detectVisualElements = async (pdf: PDFDocumentProxy, pageIndex: number, textElements?: TextElement[]): Promise<DetectedElement[]> => {
+  try {
+    const page = await pdf.getPage(pageIndex + 1);
+    const viewport = page.getViewport({ scale: 1 });
+    
+    // Create high-resolution canvas for better line detection (similar to Python DPI approach)
+    const canvas = document.createElement('canvas');
+    const context = canvas.getContext('2d');
+    if (!context) return [];
+    
+    const scale = 3; // Higher resolution for better line detection
+    canvas.width = viewport.width * scale;
+    canvas.height = viewport.height * scale;
+    
+    const scaledViewport = page.getViewport({ scale });
+    
+    // Render the page to canvas
+    await page.render({
+      canvasContext: context,
+      canvas: canvas,
+      viewport: scaledViewport
+    }).promise;
+    
+    // Get image data for analysis
+    const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+    
+    // Use the new sophisticated detection system
+    const detector = new PDFFieldDetector({
+      minTextFieldHeight: Math.max(12, canvas.height * 0.015), // Minimum 10pt text height
+      maxFieldHeight: canvas.height * 0.5, // Maximum 1/2 page height
+      minCheckboxSize: Math.max(8, canvas.width * 0.008),
+      maxCheckboxSize: Math.min(20, canvas.width * 0.025),
+      minRadioSize: Math.max(8, canvas.width * 0.008),
+      maxRadioSize: Math.min(16, canvas.width * 0.02),
+      mergeThreshold: Math.max(3, canvas.width * 0.005),
+      confidenceThreshold: 0.25 // Reduced threshold to be less conservative
+    });
+    
+    const allElements = detector.detectFields(imageData, canvas.width, canvas.height, textElements);
+    
+    // Convert back to normalized coordinates relative to original viewport
+    return allElements.map(element => ({
+      ...element,
+      rect: {
+        x: element.rect.x / (viewport.width * scale),
+        y: element.rect.y / (viewport.height * scale),
+        width: element.rect.width / (viewport.width * scale),  
+        height: element.rect.height / (viewport.height * scale)
+      }
+    }));
+    
+  } catch (error) {
+    console.warn('Failed to detect visual elements:', error);
+    return [];
+  }
+};
+
+// Simplified text field detection to prevent UI blocking
 const PdfEditor = () => {
   const pdfjsRef = useRef<PdfJsModule | null>(null);
 
@@ -1018,6 +1208,10 @@ const PdfEditor = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [fieldSuggestions, setFieldSuggestions] = useState<FieldSuggestion[]>([]);
+  const [isAutoDetecting, setIsAutoDetecting] = useState(false);
+  const [detectionProgress, setDetectionProgress] = useState({ current: 0, total: 0 });
+  const [showSuggestions, setShowSuggestions] = useState(false);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const pageRefs = useRef<Record<number, HTMLDivElement | null>>({});
   const renderScale = 1.2;
@@ -1029,7 +1223,11 @@ const PdfEditor = () => {
     const loadedModule = await loadPdfJs();
     pdfjsRef.current = loadedModule;
     if (typeof window !== "undefined") {
-      loadedModule.GlobalWorkerOptions.workerSrc = "/pdf-editor-ui/pdf.worker.min.mjs";
+      // Use dynamic path based on environment
+      const basePath = process.env.NODE_ENV === 'production' && process.env.GITHUB_ACTIONS === 'true' 
+        ? '/pdf-editor-ui' 
+        : '';
+      loadedModule.GlobalWorkerOptions.workerSrc = `${basePath}/pdf.worker.min.mjs`;
     }
     return loadedModule;
   }, []);
@@ -1138,6 +1336,30 @@ const PdfEditor = () => {
       pageNode.scrollIntoView({ block: "nearest", behavior: "smooth" });
     }
   }, [selectedFieldId, fields]);
+
+  // Add testing functionality to window for console access
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      (window as any).testPDFDetection = async (labeledPdfUrl: string, unlabeledPdfUrl: string) => {
+        try {
+          console.log('Loading test PDFs...');
+          
+          // This would need to be implemented to load and compare PDFs
+          // For now, just log the intent
+          console.log(`Would test detection between:
+            - Labeled: ${labeledPdfUrl}
+            - Unlabeled: ${unlabeledPdfUrl}`);
+          
+          console.log('Test functionality available. Use: window.testPDFDetection("labeled.pdf", "unlabeled.pdf")');
+        } catch (error) {
+          console.error('Test failed:', error);
+        }
+      };
+
+      // Log available test functions
+      console.log('PDF Detection testing available via: window.testPDFDetection(labeledUrl, unlabeledUrl)');
+    }
+  }, []);
 
   const handleFileChange = useCallback(async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -1268,6 +1490,148 @@ const PdfEditor = () => {
     setSelectedFieldId(recentlyDeletedField.id);
     setRecentlyDeletedField(null);
   };
+
+  const handleAutoDetectFields = useCallback(async () => {
+    if (!pdfProxy) return;
+    
+    setIsAutoDetecting(true);
+    setError(null);
+    setFieldSuggestions([]); // Clear existing suggestions
+    
+    try {
+      const allSuggestions: FieldSuggestion[] = [];
+      const totalPages = pdfProxy.numPages;
+      
+      // Initialize progress
+      setDetectionProgress({ current: 0, total: totalPages });
+      
+      // Process pages one by one with progress updates and yielding control
+      for (let pageIndex = 0; pageIndex < totalPages; pageIndex++) {
+        // Update progress indication
+        setDetectionProgress({ current: pageIndex + 1, total: totalPages });
+        console.log(`Processing page ${pageIndex + 1} of ${totalPages}...`);
+        
+        // Yield control to the UI thread before processing each page
+        await new Promise(resolve => setTimeout(resolve, 0));
+        
+        try {
+          // Process text extraction first
+          const textElements = await extractTextFromPage(pdfProxy, pageIndex);
+          
+          // Yield control again before heavy visual processing
+          await new Promise(resolve => setTimeout(resolve, 10));
+          
+          // Process visual detection with timeout to prevent hanging
+          const detectedElements = await Promise.race([
+            detectVisualElements(pdfProxy, pageIndex, textElements),
+            new Promise<DetectedElement[]>((_, reject) => 
+              setTimeout(() => reject(new Error('Visual detection timeout')), 30000)
+            )
+          ]);
+          
+          // Generate suggestions from detected elements
+          const pageSuggestions = detectedElements.map((element, index) => {
+            // Simple field name generation
+            const suggestedName = `field_${allSuggestions.length + index + 1}`;
+            const suggestedType: FieldType = element.type === 'text' ? 'text' : 
+                                           element.type === 'checkbox' ? 'checkbox' :
+                                           element.type === 'radio' ? 'radio' :
+                                           element.type === 'signature' ? 'signature' : 'text';
+            
+            return {
+              element,
+              suggestedName,
+              suggestedType,
+              nearbyText: [],
+              confidence: element.confidence,
+              pageIndex,
+              name: suggestedName,
+              type: suggestedType,
+              x: element.rect.x,
+              y: element.rect.y,
+              width: element.rect.width,
+              height: element.rect.height
+            };
+          });
+          
+          allSuggestions.push(...pageSuggestions);
+          
+          // Update intermediate results so user sees progress
+          if (pageSuggestions.length > 0) {
+            const currentSuggestions = allSuggestions.filter(s => s.confidence > 0.4);
+            setFieldSuggestions([...currentSuggestions]);
+            setShowSuggestions(true);
+          }
+          
+        } catch (pageError) {
+          console.warn(`Error processing page ${pageIndex + 1}:`, pageError);
+          // Continue with other pages even if one fails
+        }
+      }
+      
+      // Final filtering and sorting
+      const highConfidenceSuggestions = allSuggestions
+        .filter(s => s.confidence > 0.4)
+        .sort((a, b) => b.confidence - a.confidence);
+      
+      setFieldSuggestions(highConfidenceSuggestions);
+      setShowSuggestions(true);
+      
+    } catch (autoDetectError) {
+      console.error('Auto-detection failed:', autoDetectError);
+      setError('Failed to auto-detect fields. Please try manual field creation.');
+    } finally {
+      setIsAutoDetecting(false);
+    }
+  }, [pdfProxy]);
+
+  const handleAcceptSuggestion = useCallback((suggestion: FieldSuggestion) => {
+    const newField: PdfField = {
+      id: uuid(),
+      name: suggestion.suggestedName,
+      type: suggestion.suggestedType,
+      pageIndex: suggestion.pageIndex || 0,
+      rect: {
+        x: suggestion.element.rect.x,
+        y: suggestion.element.rect.y,
+        width: suggestion.element.rect.width,
+        height: suggestion.element.rect.height
+      },
+      autoSize: true,
+      font: "Helvetica",
+      fontSize: 12,
+    };
+
+    setFields(prev => [...prev, newField]);
+    setFieldSuggestions(prev => prev.filter(s => s !== suggestion));
+  }, []);
+
+  const handleAcceptAllSuggestions = useCallback(() => {
+    const newFields: PdfField[] = fieldSuggestions.map(suggestion => ({
+      id: uuid(),
+      name: suggestion.suggestedName,
+      type: suggestion.suggestedType,
+      pageIndex: suggestion.pageIndex || 0,
+      rect: {
+        x: suggestion.element.rect.x,
+        y: suggestion.element.rect.y,
+        width: suggestion.element.rect.width,
+        height: suggestion.element.rect.height
+      },
+      autoSize: true,
+      font: "Helvetica",
+      fontSize: 12,
+    }));
+
+    setFields(prev => [...prev, ...newFields]);
+    setFieldSuggestions([]);
+    setShowSuggestions(false);
+  }, [fieldSuggestions]);
+
+  const handleRejectAllSuggestions = useCallback(() => {
+    setFieldSuggestions([]);
+    setShowSuggestions(false);
+  }, []);
 
   const handleExport = useCallback(async () => {
     if (!pdfBinary) {
@@ -1467,7 +1831,102 @@ const PdfEditor = () => {
               {pdfProxy.numPages} page{pdfProxy.numPages === 1 ? "" : "s"}
             </span>
           ) : null}
+          {pdfProxy && (
+            <button
+              type="button"
+              onClick={handleAutoDetectFields}
+              disabled={isAutoDetecting}
+              className="inline-flex items-center gap-2 rounded border border-emerald-300 px-3 py-2 text-sm font-medium text-emerald-700 hover:border-emerald-400 hover:bg-emerald-50 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {isAutoDetecting ? (
+                <>
+                  <svg className="w-4 h-4 animate-spin" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+                    <path d="M21 12a9 9 0 11-6.219-8.56"/>
+                  </svg>
+                  {detectionProgress.total > 0 ? 
+                    `Processing ${detectionProgress.current}/${detectionProgress.total}...` : 
+                    'Detecting...'
+                  }
+                </>
+              ) : (
+                <>
+                  <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+                    <circle cx="11" cy="11" r="8"/>
+                    <path d="m21 21-4.35-4.35"/>
+                  </svg>
+                  Auto-Detect Fields
+                </>
+              )}
+            </button>
+          )}
         </div>
+
+        {fieldSuggestions.length > 0 && showSuggestions && (
+          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
+            <div className="flex items-center justify-between mb-3">
+              <h3 className="text-sm font-medium text-blue-900">
+                Found {fieldSuggestions.length} potential field{fieldSuggestions.length === 1 ? '' : 's'}
+              </h3>
+              <button
+                type="button"
+                onClick={() => setShowSuggestions(false)}
+                className="text-blue-500 hover:text-blue-700"
+              >
+                <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+                  <path d="M18 6L6 18M6 6l12 12"/>
+                </svg>
+              </button>
+            </div>
+            <div className="space-y-2 max-h-40 overflow-y-auto">
+              {fieldSuggestions.map((suggestion, index) => (
+                <div key={index} className="flex items-center justify-between bg-white p-2 rounded border">
+                  <div className="flex items-center gap-2">
+                    <div className="flex items-center justify-center w-6 h-6 bg-slate-100 rounded text-xs">
+                      {getFieldIcon(suggestion.type)}
+                    </div>
+                    <div>
+                      <span className="text-sm font-medium">{suggestion.name}</span>
+                      <span className="text-xs text-slate-500 ml-2">
+                        ({suggestion.type} at {Math.round(suggestion.x)}, {Math.round(suggestion.y)})
+                      </span>
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => handleAcceptSuggestion(suggestion)}
+                    className="text-xs bg-green-600 text-white px-2 py-1 rounded hover:bg-green-700"
+                  >
+                    Add Field
+                  </button>
+                </div>
+              ))}
+            </div>
+            <div className="flex gap-2 mt-3">
+              <button
+                type="button"
+                onClick={() => {
+                  fieldSuggestions.forEach(handleAcceptSuggestion);
+                  setFieldSuggestions([]);
+                  setShowSuggestions(false);
+                }}
+                className="text-xs bg-blue-600 text-white px-3 py-1.5 rounded hover:bg-blue-700"
+              >
+                Add All Fields
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setFieldSuggestions([]);
+                  setShowSuggestions(false);
+                }}
+                className="text-xs bg-slate-600 text-white px-3 py-1.5 rounded hover:bg-slate-700"
+              >
+                Dismiss All
+              </button>
+            </div>
+          </div>
+        )}
+
         <div className="flex flex-wrap items-center gap-2">
           {(Object.keys(TOOL_LABELS) as FieldType[]).map((tool) => {
             const IconComponent = FieldIcons[tool];
