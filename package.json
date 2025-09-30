@@ -6,9 +6,13 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "benchmark:detection": "npx tsx benchmarks/detection/cli.ts",
+    "benchmark:smoke": "npx tsx benchmarks/detection/evaluate_smoke.ts",
+    "preflight:canvas": "npx tsx scripts/canvas-preflight.ts"
   },
   "dependencies": {
+    "canvas": "^3.2.0",
     "next": "15.5.4",
     "pdf-lib": "^1.17.1",
     "pdfjs-dist": "^5.4.149",
@@ -19,9 +23,11 @@
   "devDependencies": {
     "@eslint/eslintrc": "^3",
     "@tailwindcss/postcss": "^4",
+    "@types/commander": "^2.12.2",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "commander": "^12.1.0",
     "eslint": "^9",
     "eslint-config-next": "15.5.4",
     "tailwindcss": "^4",

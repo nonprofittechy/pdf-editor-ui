@@ -1,0 +1,62 @@
+{
+  "documentId": "Official_Favorite_Fruits",
+  "pages": [
+    {
+      "pageIndex": 0,
+      "width": 612,
+      "height": 792,
+      "fields": [
+        {
+          "id": "name",
+          "type": "text",
+          "rect": {
+            "x": 0.12,
+            "y": 0.22,
+            "width": 0.68,
+            "height": 0.06
+          }
+        },
+        {
+          "id": "favorite_fruit",
+          "type": "dropdown",
+          "rect": {
+            "x": 0.12,
+            "y": 0.34,
+            "width": 0.42,
+            "height": 0.055
+          }
+        },
+        {
+          "id": "organic_preference",
+          "type": "radio",
+          "rect": {
+            "x": 0.63,
+            "y": 0.34,
+            "width": 0.05,
+            "height": 0.05
+          }
+        },
+        {
+          "id": "newsletter_opt_in",
+          "type": "checkbox",
+          "rect": {
+            "x": 0.12,
+            "y": 0.46,
+            "width": 0.045,
+            "height": 0.045
+          }
+        },
+        {
+          "id": "signature",
+          "type": "signature",
+          "rect": {
+            "x": 0.12,
+            "y": 0.64,
+            "width": 0.55,
+            "height": 0.07
+          }
+        }
+      ]
+    }
+  ]
+}

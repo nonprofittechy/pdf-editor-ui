@@ -1,0 +1,1965 @@
+
+> pdf-editor-ui@0.1.0 benchmark:detection
+> npx tsx benchmarks/detection/cli.ts --detector heuristic:pdfjs --json
+
+{
+  "heuristic:pdfjs": {
+    "documents": [
+      {
+        "documentId": "1_RFA-complaint",
+        "threshold": 0.5,
+        "perType": {},
+        "micro": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "support": 0,
+          "predicted": 0
+        },
+        "macro": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "support": 0,
+          "predicted": 0
+        },
+        "matches": [],
+        "falsePositives": [],
+        "falseNegatives": []
+      },
+      {
+        "documentId": "209A_Plaintiff_Confidential_Information",
+        "threshold": 0.5,
+        "perType": {},
+        "micro": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "support": 0,
+          "predicted": 0
+        },
+        "macro": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "support": 0,
+          "predicted": 0
+        },
+        "matches": [],
+        "falsePositives": [],
+        "falseNegatives": []
+      },
+      {
+        "documentId": "209A_affidavit_disclosing_care_or_custody_proceedings",
+        "threshold": 0.5,
+        "perType": {},
+        "micro": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "support": 0,
+          "predicted": 0
+        },
+        "macro": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "support": 0,
+          "predicted": 0
+        },
+        "matches": [],
+        "falsePositives": [],
+        "falseNegatives": []
+      },
+      {
+        "documentId": "209A_complaint_page2",
+        "threshold": 0.5,
+        "perType": {},
+        "micro": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "support": 0,
+          "predicted": 0
+        },
+        "macro": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "support": 0,
+          "predicted": 0
+        },
+        "matches": [],
+        "falsePositives": [],
+        "falseNegatives": []
+      },
+      {
+        "documentId": "209A_defendant_s_child_support_affidavit_ready_for_upload",
+        "threshold": 0.5,
+        "perType": {},
+        "micro": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "support": 0,
+          "predicted": 0
+        },
+        "macro": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "support": 0,
+          "predicted": 0
+        },
+        "matches": [],
+        "falsePositives": [],
+        "falseNegatives": []
+      },
+      {
+        "documentId": "209A_plaintiff_s_motion_to_modify_qc_v4",
+        "threshold": 0.5,
+        "perType": {},
+        "micro": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "support": 0,
+          "predicted": 0
+        },
+        "macro": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "support": 0,
+          "predicted": 0
+        },
+        "matches": [],
+        "falsePositives": [],
+        "falseNegatives": []
+      },
+      {
+        "documentId": "209a_258e_motion_for_impoundment",
+        "threshold": 0.5,
+        "perType": {},
+        "micro": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "support": 0,
+          "predicted": 0
+        },
+        "macro": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "support": 0,
+          "predicted": 0
+        },
+        "matches": [],
+        "falsePositives": [],
+        "falseNegatives": []
+      },
+      {
+        "documentId": "2_RFA-service-info",
+        "threshold": 0.5,
+        "perType": {},
+        "micro": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "support": 0,
+          "predicted": 0
+        },
+        "macro": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "support": 0,
+          "predicted": 0
+        },
+        "matches": [],
+        "falsePositives": [],
+        "falseNegatives": []
+      },
+      {
+        "documentId": "3_RFA-affidavit",
+        "threshold": 0.5,
+        "perType": {},
+        "micro": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "support": 0,
+          "predicted": 0
+        },
+        "macro": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "support": 0,
+          "predicted": 0
+        },
+        "matches": [],
+        "falsePositives": [],
+        "falseNegatives": []
+      },
+      {
+        "documentId": "4_RFA-confidential-contact-info",
+        "threshold": 0.5,
+        "perType": {},
+        "micro": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "support": 0,
+          "predicted": 0
+        },
+        "macro": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "support": 0,
+          "predicted": 0
+        },
+        "matches": [],
+        "falsePositives": [],
+        "falseNegatives": []
+      },
+      {
+        "documentId": "Applicant_intake_worksheet",
+        "threshold": 0.5,
+        "perType": {},
+        "micro": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "support": 0,
+          "predicted": 0
+        },
+        "macro": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "support": 0,
+          "predicted": 0
+        },
+        "matches": [],
+        "falsePositives": [],
+        "falseNegatives": []
+      },
+      {
+        "documentId": "Application_for_appointment",
+        "threshold": 0.5,
+        "perType": {},
+        "micro": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "support": 0,
+          "predicted": 0
+        },
+        "macro": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "support": 0,
+          "predicted": 0
+        },
+        "matches": [],
+        "falsePositives": [],
+        "falseNegatives": []
+      },
+      {
+        "documentId": "Apply_for_temporary_protected_statu",
+        "threshold": 0.5,
+        "perType": {},
+        "micro": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "support": 0,
+          "predicted": 0
+        },
+        "macro": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "support": 0,
+          "predicted": 0
+        },
+        "matches": [],
+        "falsePositives": [],
+        "falseNegatives": []
+      },
+      {
+        "documentId": "Bond_MPC_801",
+        "threshold": 0.5,
+        "perType": {},
+        "micro": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "support": 0,
+          "predicted": 0
+        },
+        "macro": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "support": 0,
+          "predicted": 0
+        },
+        "matches": [],
+        "falsePositives": [],
+        "falseNegatives": []
+      },
+      {
+        "documentId": "CRA_Motion_to_Dismiss",
+        "threshold": 0.5,
+        "perType": {},
+        "micro": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "support": 0,
+          "predicted": 0
+        },
+        "macro": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "support": 0,
+          "predicted": 0
+        },
+        "matches": [],
+        "falsePositives": [],
+        "falseNegatives": []
+      },
+      {
+        "documentId": "Health_record_civil_union",
+        "threshold": 0.5,
+        "perType": {},
+        "micro": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "support": 0,
+          "predicted": 0
+        },
+        "macro": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "support": 0,
+          "predicted": 0
+        },
+        "matches": [],
+        "falsePositives": [],
+        "falseNegatives": []
+      },
+      {
+        "documentId": "Health_record_divorce_annulment",
+        "threshold": 0.5,
+        "perType": {},
+        "micro": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "support": 0,
+          "predicted": 0
+        },
+        "macro": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "support": 0,
+          "predicted": 0
+        },
+        "matches": [],
+        "falsePositives": [],
+        "falseNegatives": []
+      },
+      {
+        "documentId": "I-765_flattened_MN_updated",
+        "threshold": 0.5,
+        "perType": {},
+        "micro": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "support": 0,
+          "predicted": 0
+        },
+        "macro": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "support": 0,
+          "predicted": 0
+        },
+        "matches": [],
+        "falsePositives": [],
+        "falseNegatives": []
+      },
+      {
+        "documentId": "I-821_flattened_MN",
+        "threshold": 0.5,
+        "perType": {},
+        "micro": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "support": 0,
+          "predicted": 0
+        },
+        "macro": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "support": 0,
+          "predicted": 0
+        },
+        "matches": [],
+        "falsePositives": [],
+        "falseNegatives": []
+      },
+      {
+        "documentId": "Official_Favorite_Fruits",
+        "threshold": 0.5,
+        "perType": {},
+        "micro": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "support": 0,
+          "predicted": 0
+        },
+        "macro": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "support": 0,
+          "predicted": 0
+        },
+        "matches": [],
+        "falsePositives": [],
+        "falseNegatives": []
+      },
+      {
+        "documentId": "Petition_for_Appointment_of_Guardian_for_an_Incapacitated_Person_wFields",
+        "threshold": 0.5,
+        "perType": {},
+        "micro": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "support": 0,
+          "predicted": 0
+        },
+        "macro": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "support": 0,
+          "predicted": 0
+        },
+        "matches": [],
+        "falsePositives": [],
+        "falseNegatives": []
+      },
+      {
+        "documentId": "Plaintiff_Affidavit_in_support_of_request_for_child_support_order",
+        "threshold": 0.5,
+        "perType": {},
+        "micro": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "support": 0,
+          "predicted": 0
+        },
+        "macro": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "support": 0,
+          "predicted": 0
+        },
+        "matches": [],
+        "falsePositives": [],
+        "falseNegatives": []
+      },
+      {
+        "documentId": "Transfer-of-Ownership",
+        "threshold": 0.5,
+        "perType": {},
+        "micro": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "support": 0,
+          "predicted": 0
+        },
+        "macro": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "support": 0,
+          "predicted": 0
+        },
+        "matches": [],
+        "falsePositives": [],
+        "falseNegatives": []
+      },
+      {
+        "documentId": "affidavit_disclosing_care_or_custody",
+        "threshold": 0.5,
+        "perType": {},
+        "micro": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "support": 0,
+          "predicted": 0
+        },
+        "macro": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "support": 0,
+          "predicted": 0
+        },
+        "matches": [],
+        "falsePositives": [],
+        "falseNegatives": []
+      },
+      {
+        "documentId": "appearance_acrobat_pro_edited",
+        "threshold": 0.5,
+        "perType": {},
+        "micro": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "support": 0,
+          "predicted": 0
+        },
+        "macro": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "support": 0,
+          "predicted": 0
+        },
+        "matches": [],
+        "falsePositives": [],
+        "falseNegatives": []
+      },
+      {
+        "documentId": "appearance_additional_proof_delivery",
+        "threshold": 0.5,
+        "perType": {},
+        "micro": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "support": 0,
+          "predicted": 0
+        },
+        "macro": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "support": 0,
+          "predicted": 0
+        },
+        "matches": [],
+        "falsePositives": [],
+        "falseNegatives": []
+      },
+      {
+        "documentId": "appearance_additional_proof_delivery_edited",
+        "threshold": 0.5,
+        "perType": {},
+        "micro": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "support": 0,
+          "predicted": 0
+        },
+        "macro": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "support": 0,
+          "predicted": 0
+        },
+        "matches": [],
+        "falsePositives": [],
+        "falseNegatives": []
+      },
+      {
+        "documentId": "appearance_edited",
+        "threshold": 0.5,
+        "perType": {},
+        "micro": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "support": 0,
+          "predicted": 0
+        },
+        "macro": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "support": 0,
+          "predicted": 0
+        },
+        "matches": [],
+        "falsePositives": [],
+        "falseNegatives": []
+      },
+      {
+        "documentId": "appearance_instructions_with_fake_field",
+        "threshold": 0.5,
+        "perType": {},
+        "micro": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "support": 0,
+          "predicted": 0
+        },
+        "macro": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "support": 0,
+          "predicted": 0
+        },
+        "matches": [],
+        "falsePositives": [],
+        "falseNegatives": []
+      },
+      {
+        "documentId": "civil_docketing_statement_labeled",
+        "threshold": 0.5,
+        "perType": {},
+        "micro": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "support": 0,
+          "predicted": 0
+        },
+        "macro": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "support": 0,
+          "predicted": 0
+        },
+        "matches": [],
+        "falsePositives": [],
+        "falseNegatives": []
+      },
+      {
+        "documentId": "complaint_209A_affidavit",
+        "threshold": 0.5,
+        "perType": {},
+        "micro": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "support": 0,
+          "predicted": 0
+        },
+        "macro": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "support": 0,
+          "predicted": 0
+        },
+        "matches": [],
+        "falsePositives": [],
+        "falseNegatives": []
+      },
+      {
+        "documentId": "complaint_209A_labeled_1",
+        "threshold": 0.5,
+        "perType": {},
+        "micro": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "support": 0,
+          "predicted": 0
+        },
+        "macro": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "support": 0,
+          "predicted": 0
+        },
+        "matches": [],
+        "falsePositives": [],
+        "falseNegatives": []
+      },
+      {
+        "documentId": "consent_to_nomination_by_a_minor",
+        "threshold": 0.5,
+        "perType": {},
+        "micro": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "support": 0,
+          "predicted": 0
+        },
+        "macro": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "support": 0,
+          "predicted": 0
+        },
+        "matches": [],
+        "falsePositives": [],
+        "falseNegatives": []
+      },
+      {
+        "documentId": "cover_page",
+        "threshold": 0.5,
+        "perType": {},
+        "micro": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "support": 0,
+          "predicted": 0
+        },
+        "macro": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "support": 0,
+          "predicted": 0
+        },
+        "matches": [],
+        "falsePositives": [],
+        "falseNegatives": []
+      },
+      {
+        "documentId": "debts",
+        "threshold": 0.5,
+        "perType": {},
+        "micro": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "support": 0,
+          "predicted": 0
+        },
+        "macro": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "support": 0,
+          "predicted": 0
+        },
+        "matches": [],
+        "falsePositives": [],
+        "falseNegatives": []
+      },
+      {
+        "documentId": "defendant-information-209A",
+        "threshold": 0.5,
+        "perType": {},
+        "micro": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "support": 0,
+          "predicted": 0
+        },
+        "macro": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "support": 0,
+          "predicted": 0
+        },
+        "matches": [],
+        "falsePositives": [],
+        "falseNegatives": []
+      },
+      {
+        "documentId": "delme",
+        "threshold": 0.5,
+        "perType": {},
+        "micro": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "support": 0,
+          "predicted": 0
+        },
+        "macro": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "support": 0,
+          "predicted": 0
+        },
+        "matches": [],
+        "falsePositives": [],
+        "falseNegatives": []
+      },
+      {
+        "documentId": "divorce_no_kids",
+        "threshold": 0.5,
+        "perType": {},
+        "micro": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "support": 0,
+          "predicted": 0
+        },
+        "macro": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "support": 0,
+          "predicted": 0
+        },
+        "matches": [],
+        "falsePositives": [],
+        "falseNegatives": []
+      },
+      {
+        "documentId": "divorce_with_kids",
+        "threshold": 0.5,
+        "perType": {},
+        "micro": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "support": 0,
+          "predicted": 0
+        },
+        "macro": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "support": 0,
+          "predicted": 0
+        },
+        "matches": [],
+        "falsePositives": [],
+        "falseNegatives": []
+      },
+      {
+        "documentId": "ending_page",
+        "threshold": 0.5,
+        "perType": {},
+        "micro": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "support": 0,
+          "predicted": 0
+        },
+        "macro": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "support": 0,
+          "predicted": 0
+        },
+        "matches": [],
+        "falsePositives": [],
+        "falseNegatives": []
+      },
+      {
+        "documentId": "fruit_template",
+        "threshold": 0.5,
+        "perType": {},
+        "micro": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "support": 0,
+          "predicted": 0
+        },
+        "macro": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "support": 0,
+          "predicted": 0
+        },
+        "matches": [],
+        "falsePositives": [],
+        "falseNegatives": []
+      },
+      {
+        "documentId": "jud-pfc-mpc821-guardianship-care-plan-report-incapacitated-person",
+        "threshold": 0.5,
+        "perType": {},
+        "micro": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "support": 0,
+          "predicted": 0
+        },
+        "macro": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "support": 0,
+          "predicted": 0
+        },
+        "matches": [],
+        "falsePositives": [],
+        "falseNegatives": []
+      },
+      {
+        "documentId": "letter",
+        "threshold": 0.5,
+        "perType": {},
+        "micro": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "support": 0,
+          "predicted": 0
+        },
+        "macro": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "support": 0,
+          "predicted": 0
+        },
+        "matches": [],
+        "falsePositives": [],
+        "falseNegatives": []
+      },
+      {
+        "documentId": "military_affidavit",
+        "threshold": 0.5,
+        "perType": {},
+        "micro": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "support": 0,
+          "predicted": 0
+        },
+        "macro": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "support": 0,
+          "predicted": 0
+        },
+        "matches": [],
+        "falsePositives": [],
+        "falseNegatives": []
+      },
+      {
+        "documentId": "motion_temporary_guardian",
+        "threshold": 0.5,
+        "perType": {},
+        "micro": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "support": 0,
+          "predicted": 0
+        },
+        "macro": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "support": 0,
+          "predicted": 0
+        },
+        "matches": [],
+        "falsePositives": [],
+        "falseNegatives": []
+      },
+      {
+        "documentId": "mpc320-verified-motion-for-appt-temp-guardian-for-incapacitated-person",
+        "threshold": 0.5,
+        "perType": {},
+        "micro": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "support": 0,
+          "predicted": 0
+        },
+        "macro": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "support": 0,
+          "predicted": 0
+        },
+        "matches": [],
+        "falsePositives": [],
+        "falseNegatives": []
+      },
+      {
+        "documentId": "mpc400-medical-certificate-guardianship-or-conservatorship",
+        "threshold": 0.5,
+        "perType": {},
+        "micro": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "support": 0,
+          "predicted": 0
+        },
+        "macro": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "support": 0,
+          "predicted": 0
+        },
+        "matches": [],
+        "falsePositives": [],
+        "falseNegatives": []
+      },
+      {
+        "documentId": "mpc402-clinical-team-report",
+        "threshold": 0.5,
+        "perType": {},
+        "micro": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "support": 0,
+          "predicted": 0
+        },
+        "macro": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "support": 0,
+          "predicted": 0
+        },
+        "matches": [],
+        "falsePositives": [],
+        "falseNegatives": []
+      },
+      {
+        "documentId": "mpc800-clinician-affidavit-competency-proposed-treatment",
+        "threshold": 0.5,
+        "perType": {},
+        "micro": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "support": 0,
+          "predicted": 0
+        },
+        "macro": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "support": 0,
+          "predicted": 0
+        },
+        "matches": [],
+        "falsePositives": [],
+        "falseNegatives": []
+      },
+      {
+        "documentId": "mpc825-treatment-plan",
+        "threshold": 0.5,
+        "perType": {},
+        "micro": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "support": 0,
+          "predicted": 0
+        },
+        "macro": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "support": 0,
+          "predicted": 0
+        },
+        "matches": [],
+        "falsePositives": [],
+        "falseNegatives": []
+      },
+      {
+        "documentId": "mpc_801_bond",
+        "threshold": 0.5,
+        "perType": {},
+        "micro": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "support": 0,
+          "predicted": 0
+        },
+        "macro": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "support": 0,
+          "predicted": 0
+        },
+        "matches": [],
+        "falsePositives": [],
+        "falseNegatives": []
+      },
+      {
+        "documentId": "notice_of_appearance_and_objection",
+        "threshold": 0.5,
+        "perType": {},
+        "micro": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "support": 0,
+          "predicted": 0
+        },
+        "macro": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "support": 0,
+          "predicted": 0
+        },
+        "matches": [],
+        "falsePositives": [],
+        "falseNegatives": []
+      },
+      {
+        "documentId": "parental_consent_to_petition",
+        "threshold": 0.5,
+        "perType": {},
+        "micro": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "support": 0,
+          "predicted": 0
+        },
+        "macro": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "support": 0,
+          "predicted": 0
+        },
+        "matches": [],
+        "falsePositives": [],
+        "falseNegatives": []
+      },
+      {
+        "documentId": "pcor",
+        "threshold": 0.5,
+        "perType": {},
+        "micro": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "support": 0,
+          "predicted": 0
+        },
+        "macro": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "support": 0,
+          "predicted": 0
+        },
+        "matches": [],
+        "falsePositives": [],
+        "falseNegatives": []
+      },
+      {
+        "documentId": "petition_for_appointment_of_guardian",
+        "threshold": 0.5,
+        "perType": {},
+        "micro": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "support": 0,
+          "predicted": 0
+        },
+        "macro": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "support": 0,
+          "predicted": 0
+        },
+        "matches": [],
+        "falsePositives": [],
+        "falseNegatives": []
+      },
+      {
+        "documentId": "petition_for_removal_of_guardian",
+        "threshold": 0.5,
+        "perType": {},
+        "micro": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "support": 0,
+          "predicted": 0
+        },
+        "macro": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "support": 0,
+          "predicted": 0
+        },
+        "matches": [],
+        "falsePositives": [],
+        "falseNegatives": []
+      },
+      {
+        "documentId": "redact_demo",
+        "threshold": 0.5,
+        "perType": {},
+        "micro": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "support": 0,
+          "predicted": 0
+        },
+        "macro": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "support": 0,
+          "predicted": 0
+        },
+        "matches": [],
+        "falsePositives": [],
+        "falseNegatives": []
+      },
+      {
+        "documentId": "sample-form-checkbox-export-value",
+        "threshold": 0.5,
+        "perType": {},
+        "micro": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "support": 0,
+          "predicted": 0
+        },
+        "macro": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "support": 0,
+          "predicted": 0
+        },
+        "matches": [],
+        "falsePositives": [],
+        "falseNegatives": []
+      },
+      {
+        "documentId": "sample-form-different-export-values",
+        "threshold": 0.5,
+        "perType": {},
+        "micro": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "support": 0,
+          "predicted": 0
+        },
+        "macro": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "support": 0,
+          "predicted": 0
+        },
+        "matches": [],
+        "falsePositives": [],
+        "falseNegatives": []
+      },
+      {
+        "documentId": "sample-form",
+        "threshold": 0.5,
+        "perType": {},
+        "micro": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "support": 0,
+          "predicted": 0
+        },
+        "macro": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "support": 0,
+          "predicted": 0
+        },
+        "matches": [],
+        "falsePositives": [],
+        "falseNegatives": []
+      },
+      {
+        "documentId": "sample-sig-form-2",
+        "threshold": 0.5,
+        "perType": {},
+        "micro": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "support": 0,
+          "predicted": 0
+        },
+        "macro": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "support": 0,
+          "predicted": 0
+        },
+        "matches": [],
+        "falsePositives": [],
+        "falseNegatives": []
+      },
+      {
+        "documentId": "sample-sig-form",
+        "threshold": 0.5,
+        "perType": {},
+        "micro": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "support": 0,
+          "predicted": 0
+        },
+        "macro": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "support": 0,
+          "predicted": 0
+        },
+        "matches": [],
+        "falsePositives": [],
+        "falseNegatives": []
+      },
+      {
+        "documentId": "service_by_alternate_means_diligent_search",
+        "threshold": 0.5,
+        "perType": {},
+        "micro": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "support": 0,
+          "predicted": 0
+        },
+        "macro": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "support": 0,
+          "predicted": 0
+        },
+        "matches": [],
+        "falsePositives": [],
+        "falseNegatives": []
+      },
+      {
+        "documentId": "small_claims",
+        "threshold": 0.5,
+        "perType": {},
+        "micro": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "support": 0,
+          "predicted": 0
+        },
+        "macro": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "support": 0,
+          "predicted": 0
+        },
+        "matches": [],
+        "falsePositives": [],
+        "falseNegatives": []
+      },
+      {
+        "documentId": "temporary_agent_affidavit",
+        "threshold": 0.5,
+        "perType": {},
+        "micro": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "support": 0,
+          "predicted": 0
+        },
+        "macro": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "support": 0,
+          "predicted": 0
+        },
+        "matches": [],
+        "falsePositives": [],
+        "falseNegatives": []
+      },
+      {
+        "documentId": "test",
+        "threshold": 0.5,
+        "perType": {},
+        "micro": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "support": 0,
+          "predicted": 0
+        },
+        "macro": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "support": 0,
+          "predicted": 0
+        },
+        "matches": [],
+        "falsePositives": [],
+        "falseNegatives": []
+      },
+      {
+        "documentId": "test_aldocument_pdf_1",
+        "threshold": 0.5,
+        "perType": {},
+        "micro": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "support": 0,
+          "predicted": 0
+        },
+        "macro": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "support": 0,
+          "predicted": 0
+        },
+        "matches": [],
+        "falsePositives": [],
+        "falseNegatives": []
+      },
+      {
+        "documentId": "test_pdf",
+        "threshold": 0.5,
+        "perType": {},
+        "micro": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "support": 0,
+          "predicted": 0
+        },
+        "macro": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "support": 0,
+          "predicted": 0
+        },
+        "matches": [],
+        "falsePositives": [],
+        "falseNegatives": []
+      },
+      {
+        "documentId": "testsigform",
+        "threshold": 0.5,
+        "perType": {},
+        "micro": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "support": 0,
+          "predicted": 0
+        },
+        "macro": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "support": 0,
+          "predicted": 0
+        },
+        "matches": [],
+        "falsePositives": [],
+        "falseNegatives": []
+      }
+    ],
+    "summary": {
+      "perType": {},
+      "micro": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "precision": 0,
+        "recall": 0,
+        "f1": 0,
+        "support": 0,
+        "predicted": 0
+      },
+      "macro": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "precision": 0,
+        "recall": 0,
+        "f1": 0,
+        "support": 0,
+        "predicted": 0
+      }
+    }
+  }
+}

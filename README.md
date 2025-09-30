@@ -47,3 +47,13 @@ npm run start
 
 - Signature widgets are exported as `/Sig` fields so they appear as digital signature placeholders in compliant PDF viewers.
 - Text fields can use Helvetica, Times, or Courier families. Auto-size can be toggled off to enforce an explicit font size.
+
+## Raster Detector Prereqs
+
+The raster-based benchmark detector depends on the `canvas` package. If the module fails to install, run:
+
+```bash
+npm run preflight:canvas
+```
+
+Follow the printed OS-specific instructions (e.g., install Cairo, Pango, and related headers) and then reinstall dependencies with `npm install`.
