@@ -5,6 +5,8 @@ const nextConfig: NextConfig = {
   trailingSlash: true,
   skipTrailingSlashRedirect: true,
   distDir: 'dist',
+  basePath: '/pdf-editor-ui',
+  assetPrefix: '/pdf-editor-ui/',
   images: {
     unoptimized: true
   }

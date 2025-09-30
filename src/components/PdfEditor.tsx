@@ -1029,7 +1029,7 @@ const PdfEditor = () => {
     const loadedModule = await loadPdfJs();
     pdfjsRef.current = loadedModule;
     if (typeof window !== "undefined") {
-      loadedModule.GlobalWorkerOptions.workerSrc = "/pdf.worker.min.mjs";
+      loadedModule.GlobalWorkerOptions.workerSrc = "/pdf-editor-ui/pdf.worker.min.mjs";
     }
     return loadedModule;
   }, []);
