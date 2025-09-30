@@ -156,6 +156,15 @@ type DragState = {
   offset: { x: number; y: number };
 };
 
+type ResizeState = {
+  pageIndex: number;
+  fieldId: string;
+  pointerId: number;
+  handle: 'nw' | 'ne' | 'sw' | 'se' | 'n' | 's' | 'e' | 'w';
+  initialRect: NormalizedRect;
+  startPoint: { x: number; y: number };
+};
+
 type PdfPageProps = {
   pdf: PDFDocumentProxy;
   pageIndex: number;
@@ -165,6 +174,7 @@ type PdfPageProps = {
   onCreateField: (pageIndex: number, rect: NormalizedRect) => void;
   onSelectField: (id: string) => void;
   onMoveField: (fieldId: string, rect: NormalizedRect) => void;
+  onResizeField: (fieldId: string, rect: NormalizedRect) => void;
   selectedFieldId: string | null;
 };
 
@@ -188,8 +198,8 @@ const normalizeExistingRect = (
   rect: { x: number; y: number; width: number; height: number },
   page: PageMeasurement
 ): NormalizedRect => {
-  const normalizedWidth = clamp(rect.width / page.width, 0.02, 1);
-  const normalizedHeight = clamp(rect.height / page.height, 0.02, 1);
+  const normalizedWidth = clamp(rect.width / page.width, 0.01, 1);
+  const normalizedHeight = clamp(rect.height / page.height, 0.01, 1);
   const normalizedX = clamp(rect.x / page.width, 0, 1 - normalizedWidth);
   const normalizedY = clamp(
     1 - (rect.y + rect.height) / page.height,
@@ -341,6 +351,7 @@ const PdfPage = ({
   onCreateField,
   onSelectField,
   onMoveField,
+  onResizeField,
   selectedFieldId,
 }: PdfPageProps) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -348,7 +359,55 @@ const PdfPage = ({
   const [renderDimensions, setRenderDimensions] = useState<PageMeasurement | null>(null);
   const pendingDrawRef = useRef<PendingDraw | null>(null);
   const dragStateRef = useRef<DragState | null>(null);
+  const resizeStateRef = useRef<ResizeState | null>(null);
   const [draftRect, setDraftRect] = useState<NormalizedRect | null>(null);
+
+  // Resize handles component
+  const ResizeHandles = ({ field }: { field: PdfField }) => {
+    const handleResizeStart = (
+      event: React.PointerEvent<HTMLDivElement>,
+      handle: ResizeState['handle']
+    ) => {
+      event.stopPropagation();
+      const point = normalizePoint(event);
+      resizeStateRef.current = {
+        pageIndex,
+        fieldId: field.id,
+        pointerId: event.pointerId,
+        handle,
+        initialRect: { ...field.rect },
+        startPoint: point,
+      };
+      const container = containerRef.current;
+      if (container) {
+        container.setPointerCapture(event.pointerId);
+      }
+    };
+
+    const handles = [
+      { handle: 'nw' as const, cursor: 'nw-resize', position: 'top-0 left-0 -translate-x-1/2 -translate-y-1/2' },
+      { handle: 'ne' as const, cursor: 'ne-resize', position: 'top-0 right-0 translate-x-1/2 -translate-y-1/2' },
+      { handle: 'sw' as const, cursor: 'sw-resize', position: 'bottom-0 left-0 -translate-x-1/2 translate-y-1/2' },
+      { handle: 'se' as const, cursor: 'se-resize', position: 'bottom-0 right-0 translate-x-1/2 translate-y-1/2' },
+      { handle: 'n' as const, cursor: 'n-resize', position: 'top-0 left-1/2 -translate-x-1/2 -translate-y-1/2' },
+      { handle: 's' as const, cursor: 's-resize', position: 'bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2' },
+      { handle: 'e' as const, cursor: 'e-resize', position: 'top-1/2 right-0 translate-x-1/2 -translate-y-1/2' },
+      { handle: 'w' as const, cursor: 'w-resize', position: 'top-1/2 left-0 -translate-x-1/2 -translate-y-1/2' },
+    ];
+
+    return (
+      <>
+        {handles.map(({ handle, cursor, position }) => (
+          <div
+            key={handle}
+            className={`absolute w-2 h-2 bg-blue-600 border border-white rounded-sm ${position}`}
+            style={{ cursor }}
+            onPointerDown={(event) => handleResizeStart(event, handle)}
+          />
+        ))}
+      </>
+    );
+  };
 
   useEffect(() => {
     let isCancelled = false;
@@ -437,14 +496,14 @@ const PdfPage = ({
     const height = Math.abs(current.y - start.y);
     pendingDrawRef.current = null;
     setDraftRect(null);
-    if (width < 0.02 || height < 0.02) {
+    if (width < 0.01 || height < 0.01) {
       return;
     }
     onCreateField(pageIndex, {
       x: clamp(x, 0, 1),
       y: clamp(y, 0, 1),
-      width: clamp(width, 0.02, 1),
-      height: clamp(height, 0.02, 1),
+      width: clamp(width, 0.01, 1),
+      height: clamp(height, 0.01, 1),
     });
   }, [onCreateField, pageIndex]);
 
@@ -463,6 +522,7 @@ const PdfPage = ({
   const handlePointerMove = (event: React.PointerEvent<HTMLDivElement>) => {
     const pending = pendingDrawRef.current;
     const dragState = dragStateRef.current;
+    const resizeState = resizeStateRef.current;
     if (!containerRef.current) return;
 
     if (pending) {
@@ -479,6 +539,41 @@ const PdfPage = ({
       const newX = clamp(point.x - dragState.offset.x, 0, 1 - field.rect.width);
       const newY = clamp(point.y - dragState.offset.y, 0, 1 - field.rect.height);
       onMoveField(field.id, { ...field.rect, x: newX, y: newY });
+      return;
+    }
+
+    if (resizeState) {
+      const point = normalizePoint(event);
+      const { initialRect, startPoint, handle } = resizeState;
+      const deltaX = point.x - startPoint.x;
+      const deltaY = point.y - startPoint.y;
+      
+      let newRect = { ...initialRect };
+      
+      // Handle different resize directions
+      if (handle.includes('n')) { // north
+        newRect.y = initialRect.y + deltaY;
+        newRect.height = initialRect.height - deltaY;
+      }
+      if (handle.includes('s')) { // south
+        newRect.height = initialRect.height + deltaY;
+      }
+      if (handle.includes('w')) { // west
+        newRect.x = initialRect.x + deltaX;
+        newRect.width = initialRect.width - deltaX;
+      }
+      if (handle.includes('e')) { // east
+        newRect.width = initialRect.width + deltaX;
+      }
+      
+      // Ensure minimum size and bounds
+      const minSize = 0.01;
+      newRect.width = Math.max(minSize, newRect.width);
+      newRect.height = Math.max(minSize, newRect.height);
+      newRect.x = clamp(newRect.x, 0, 1 - newRect.width);
+      newRect.y = clamp(newRect.y, 0, 1 - newRect.height);
+      
+      onResizeField(resizeState.fieldId, newRect);
     }
   };
 
@@ -492,6 +587,10 @@ const PdfPage = ({
       dragStateRef.current = null;
     }
 
+    if (resizeStateRef.current) {
+      resizeStateRef.current = null;
+    }
+
     if (pendingDrawRef.current) {
       finalizeDraw();
     }
@@ -501,9 +600,11 @@ const PdfPage = ({
     const handlePointerMoveWindow = (event: PointerEvent) => {
       const pending = pendingDrawRef.current;
       const dragState = dragStateRef.current;
-      if (!pending && !dragState) return;
+      const resizeState = resizeStateRef.current;
+      if (!pending && !dragState && !resizeState) return;
       if (!containerRef.current) return;
       const point = normalizePoint(event);
+      
       if (pending) {
         pending.current = point;
         updateDraftRect();
@@ -513,6 +614,35 @@ const PdfPage = ({
         const newX = clamp(point.x - dragState.offset.x, 0, 1 - field.rect.width);
         const newY = clamp(point.y - dragState.offset.y, 0, 1 - field.rect.height);
         onMoveField(field.id, { ...field.rect, x: newX, y: newY });
+      } else if (resizeState) {
+        const { initialRect, startPoint, handle } = resizeState;
+        const deltaX = point.x - startPoint.x;
+        const deltaY = point.y - startPoint.y;
+        
+        let newRect = { ...initialRect };
+        
+        if (handle.includes('n')) {
+          newRect.y = initialRect.y + deltaY;
+          newRect.height = initialRect.height - deltaY;
+        }
+        if (handle.includes('s')) {
+          newRect.height = initialRect.height + deltaY;
+        }
+        if (handle.includes('w')) {
+          newRect.x = initialRect.x + deltaX;
+          newRect.width = initialRect.width - deltaX;
+        }
+        if (handle.includes('e')) {
+          newRect.width = initialRect.width + deltaX;
+        }
+        
+        const minSize = 0.01;
+        newRect.width = Math.max(minSize, newRect.width);
+        newRect.height = Math.max(minSize, newRect.height);
+        newRect.x = clamp(newRect.x, 0, 1 - newRect.width);
+        newRect.y = clamp(newRect.y, 0, 1 - newRect.height);
+        
+        onResizeField(resizeState.fieldId, newRect);
       }
     };
 
@@ -521,6 +651,7 @@ const PdfPage = ({
         finalizeDraw();
       }
       dragStateRef.current = null;
+      resizeStateRef.current = null;
       pendingDrawRef.current = null;
       setDraftRect(null);
     };
@@ -588,12 +719,23 @@ const PdfPage = ({
             style={renderRect(field.rect)}
             onPointerDown={(event) => handleFieldPointerDown(event, field)}
           >
-            <span className="absolute left-1 top-1 bg-slate-800/80 text-white text-xs px-1 py-px rounded flex items-center gap-1">
-              {field.type === 'signature' && (
-                <FieldIcons.signature className="w-3 h-3" />
-              )}
-              {field.name}
-            </span>
+            {renderDimensions && (
+              <span 
+                className="absolute left-1 top-1 bg-slate-800/80 text-white text-xs px-1 py-px rounded flex items-center gap-1 max-w-full overflow-hidden whitespace-nowrap"
+                style={{
+                  fontSize: field.rect.width * renderDimensions.width < 60 ? '10px' : '12px',
+                  display: field.rect.width * renderDimensions.width < 30 || field.rect.height * renderDimensions.height < 20 ? 'none' : 'flex'
+                }}
+              >
+                {field.type === 'signature' && field.rect.width * renderDimensions.width >= 50 && (
+                  <FieldIcons.signature className="w-3 h-3 flex-shrink-0" />
+                )}
+                <span className="truncate">
+                  {field.rect.width * renderDimensions.width < 80 ? field.name.slice(0, 8) + (field.name.length > 8 ? '...' : '') : field.name}
+                </span>
+              </span>
+            )}
+            {selectedFieldId === field.id && <ResizeHandles field={field} />}
           </div>
         ))}
         {draftRect ? (
@@ -682,7 +824,7 @@ const FieldList = ({
             return (
               <div
                 key={field.id}
-                ref={(el) => (itemRefs.current[field.id] = el)}
+                ref={(el) => { itemRefs.current[field.id] = el; }}
                 className={`rounded border ${
                   isSelected ? "border-blue-600 shadow-md" : "border-slate-200"
                 } bg-white text-sm transition-all`}
@@ -1050,6 +1192,12 @@ const PdfEditor = () => {
     );
   }, []);
 
+  const handleResizeField = useCallback((fieldId: string, rect: NormalizedRect) => {
+    setFields((prev) =>
+      prev.map((field) => (field.id === fieldId ? { ...field, rect } : field))
+    );
+  }, []);
+
   const handleUpdateField = (id: string, updates: Partial<PdfField>) => {
     clearRecentlyDeleted();
 
@@ -1171,6 +1319,11 @@ const PdfEditor = () => {
         widget.setRectangle(rect);
         widget.setFlagTo(AnnotationFlags.Print, true);
         widget.setP(page.ref);
+        // Remove border and background styling
+        widget.dict.delete(PDFName.of('BS'));
+        widget.dict.delete(PDFName.of('Border'));
+        widget.dict.delete(PDFName.of('BG'));
+        widget.dict.delete(PDFName.of('BC'));
         const widgetRef = pdfDoc.context.register(widget.dict);
         acroSignature.addWidget(widgetRef);
         page.node.addAnnot(widgetRef);
@@ -1207,22 +1360,63 @@ const PdfEditor = () => {
           if (!field.autoSize) {
             textField.setFontSize(field.fontSize);
           }
+          // Remove border and background styling
+          textField.acroField.getWidgets().forEach(widget => {
+            // Remove border style
+            widget.dict.delete(PDFName.of('BS'));
+            widget.dict.delete(PDFName.of('Border'));
+            // Remove background color
+            widget.dict.delete(PDFName.of('BG'));
+            // Remove border color
+            widget.dict.delete(PDFName.of('BC'));
+          });
         } else if (field.type === "checkbox") {
           const checkbox = form.createCheckBox(name);
           checkbox.addToPage(page, absolute);
+          // Remove border and background styling
+          checkbox.acroField.getWidgets().forEach(widget => {
+            // Remove border style
+            widget.dict.delete(PDFName.of('BS'));
+            widget.dict.delete(PDFName.of('Border'));
+            // Remove background color
+            widget.dict.delete(PDFName.of('BG'));
+            // Remove border color
+            widget.dict.delete(PDFName.of('BC'));
+          });
         } else if (field.type === "signature") {
           appendSignatureField(name, page, absolute);
         } else if (field.type === "dropdown") {
           const dropdown = form.createDropdown(name);
           dropdown.addOptions(field.options ?? []);
           dropdown.addToPage(page, absolute);
+          // Remove border and background styling
+          dropdown.acroField.getWidgets().forEach(widget => {
+            widget.dict.delete(PDFName.of('BS'));
+            widget.dict.delete(PDFName.of('Border'));
+            widget.dict.delete(PDFName.of('BG'));
+            widget.dict.delete(PDFName.of('BC'));
+          });
         } else if (field.type === "listbox") {
           const listbox = form.createOptionList(name);
           listbox.addOptions(field.options ?? []);
           listbox.addToPage(page, absolute);
+          // Remove border and background styling
+          listbox.acroField.getWidgets().forEach(widget => {
+            widget.dict.delete(PDFName.of('BS'));
+            widget.dict.delete(PDFName.of('Border'));
+            widget.dict.delete(PDFName.of('BG'));
+            widget.dict.delete(PDFName.of('BC'));
+          });
         } else if (field.type === "button") {
           const button = form.createButton(name);
-          button.addToPage(page, absolute);
+          (button as any).addToPage(page, absolute);
+          // Remove border and background styling
+          button.acroField.getWidgets().forEach(widget => {
+            widget.dict.delete(PDFName.of('BS'));
+            widget.dict.delete(PDFName.of('Border'));
+            widget.dict.delete(PDFName.of('BG'));
+            widget.dict.delete(PDFName.of('BC'));
+          });
         } else if (field.type === "radio") {
           console.warn("Exporting radio groups is not yet implemented.");
         }
@@ -1352,7 +1546,7 @@ const PdfEditor = () => {
           ) : (
             <div className="flex flex-col gap-6">
               {pageSizes.map((size, index) => (
-                <div key={index} ref={(el) => (pageRefs.current[index] = el)}>
+                <div key={index} ref={(el) => { pageRefs.current[index] = el; }}>
                   <PdfPage
                     pdf={pdfProxy}
                     pageIndex={index}
@@ -1362,6 +1556,7 @@ const PdfEditor = () => {
                     onCreateField={handleCreateField}
                     onSelectField={handleSelectField}
                     onMoveField={handleMoveField}
+                    onResizeField={handleResizeField}
                     selectedFieldId={selectedFieldId}
                   />
                 </div>
