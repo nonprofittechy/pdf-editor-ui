@@ -548,7 +548,7 @@ const PdfPage = ({
       const deltaX = point.x - startPoint.x;
       const deltaY = point.y - startPoint.y;
       
-      let newRect = { ...initialRect };
+      const newRect = { ...initialRect };
       
       // Handle different resize directions
       if (handle.includes('n')) { // north
@@ -619,7 +619,7 @@ const PdfPage = ({
         const deltaX = point.x - startPoint.x;
         const deltaY = point.y - startPoint.y;
         
-        let newRect = { ...initialRect };
+        const newRect = { ...initialRect };
         
         if (handle.includes('n')) {
           newRect.y = initialRect.y + deltaY;
@@ -662,7 +662,7 @@ const PdfPage = ({
       window.removeEventListener("pointermove", handlePointerMoveWindow);
       window.removeEventListener("pointerup", handlePointerUpWindow);
     };
-  }, [fields, finalizeDraw, normalizePoint, onMoveField, updateDraftRect]);
+  }, [fields, finalizeDraw, normalizePoint, onMoveField, onResizeField, updateDraftRect]);
 
   const handleFieldPointerDown = (
     event: React.PointerEvent<HTMLDivElement>,
@@ -1106,11 +1106,11 @@ const PdfEditor = () => {
     }
   }, [processFile]);
 
-  const clearRecentlyDeleted = () => {
+  const clearRecentlyDeleted = useCallback(() => {
     if (recentlyDeletedField) {
       setRecentlyDeletedField(null);
     }
-  };
+  }, [recentlyDeletedField]);
 
   const handleSelectField = (id: string | null) => {
     clearRecentlyDeleted();
@@ -1183,7 +1183,7 @@ const PdfEditor = () => {
       setSelectedFieldId(newField.id);
       setSelectedTool(null);
     },
-    [fields, selectedTool]
+    [fields, selectedTool, clearRecentlyDeleted]
   );
 
   const handleMoveField = useCallback((fieldId: string, rect: NormalizedRect) => {
@@ -1409,7 +1409,8 @@ const PdfEditor = () => {
           });
         } else if (field.type === "button") {
           const button = form.createButton(name);
-          (button as any).addToPage(page, absolute);
+          // TypeScript workaround for pdf-lib button API
+          (button as { addToPage: (page: unknown, rect: unknown) => void }).addToPage(page, absolute);
           // Remove border and background styling
           button.acroField.getWidgets().forEach(widget => {
             widget.dict.delete(PDFName.of('BS'));
